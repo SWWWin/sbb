@@ -1,5 +1,7 @@
 package com.mysite.sbb;
 
+import com.mysite.sbb.question.Question;
+import com.mysite.sbb.question.QuestionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ public class TestInitData {
     private final QuestionRepository questionRepository;
 
     @Bean
-    ApplicationRunner initApplicationRunner() {
+    ApplicationRunner initApplicationRunner(){
         return args -> {
             self.work1();
         };
@@ -30,7 +32,7 @@ public class TestInitData {
 
     @Transactional
     void work1() {
-        if(questionRepository.count() > 0) return;
+        if (questionRepository.count() > 0 ) return ;
 
         Question q1 = new Question();
         q1.setSubject("sbb가 무엇인가요?");
@@ -42,6 +44,9 @@ public class TestInitData {
         q2.setSubject("스프링부트 모델 질문입니다.");
         q2.setContent("id는 자동으로 생성되나요?");
         q2.setCreateDate(LocalDateTime.now());
-        this.questionRepository.save(q2);  // save: jpa에서 제공
+
+        q2.addAnswer("네 자동으로 생성됩니다.");
+
+        this.questionRepository.save(q2);  // 두번째 질문 저장
     }
 }
