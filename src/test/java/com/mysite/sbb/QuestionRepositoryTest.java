@@ -4,12 +4,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 //@ActiveProfiles("test")
 @SpringBootTest
@@ -65,5 +67,43 @@ class QuestionRepositoryTest {
         Question q = qList.get(0);
         assertThat(q.getSubject()).isEqualTo("sbb가 무엇인가요?");
         assertEquals("sbb가 무엇인가요?", q.getSubject());
+    }
+
+    @Test
+    @DisplayName("")
+    void t6() {
+        Optional<Question> oq = this.questionRepository.findById(1);
+        assertTrue(oq.isPresent());
+        Question q = oq.get();
+        q.setSubject("수정된 제목");
+        this.questionRepository.save(q);
+    }
+
+    @Test
+    @DisplayName("")
+    void t7() {
+        assertEquals(2, this.questionRepository.count());
+        Optional<Question> oq = this.questionRepository.findById(1);
+        assertTrue(oq.isPresent());
+        Question q = oq.get();
+        this.questionRepository.delete(q);
+        assertEquals(1, this.questionRepository.count());
+    }
+
+
+    @Test
+    @DisplayName("수정")
+    @Transactional
+    void t8() {
+        Question question = questionRepository.findById(1).get();
+
+        assertThat(question).isNotNull();
+
+        question.setSubject("수정된 제목");
+        questionRepository.save(question);
+
+        Question foundQuestion = questionRepository.findBySubject("수정된 제목").get();
+        assertThat(foundQuestion).isNotNull();
+
     }
 }
