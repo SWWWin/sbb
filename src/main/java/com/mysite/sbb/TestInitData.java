@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Lazy;
 
 import java.time.LocalDateTime;
 
-//@Profile("test")
 @Configuration
 @RequiredArgsConstructor
 public class TestInitData {
